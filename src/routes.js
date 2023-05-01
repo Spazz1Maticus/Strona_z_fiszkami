@@ -1,7 +1,0 @@
-// GET
-
-//POST
-
-//PUT
-
-//DELETE
