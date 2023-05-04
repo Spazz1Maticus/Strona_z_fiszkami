@@ -43,9 +43,18 @@ const removeUser = (req, res) => {
     })
 }
 
+const getCard = (req, res) => {
+    const id = Math.floor(Math.random() * 100);
+    pool.query(queries.getCard, [id], (error, results) => {
+        if(error) throw error;
+        res.status(200).json(results.rows);
+    })
+}
+
 module.exports = {
     getUsers,
     getUser,
     addUser,
     removeUser,
+    getCard,
 }

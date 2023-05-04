@@ -1,5 +1,5 @@
 import express from "express";
-import Routes from './querry/routes';
+import Routes from './query/routes';
 
 const app = express();
 const port = 4040;
