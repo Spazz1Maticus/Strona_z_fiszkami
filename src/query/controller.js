@@ -1,6 +1,7 @@
 import pool from "../db";
 import queries from "./queries";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const getUsers = (req, res) => {
   pool.query(queries.getUsers, (error, results) => {
@@ -80,16 +81,12 @@ const addUser = (req, res) => {
           res.send("Username is taken.");
           return;
         }
-        pool.query(
-          queries.addUser,
-          [username, email, hash],
-          (error, results) => {
-            if (error) throw error;
-            res.status(201).send("User Created!");
-            console.log("User created");
-            return;
-          }
-        );
+        pool.query(queries.addUser, [username, email, hash], (error, results) => {
+          if (error) throw error;
+          res.status(201).send("User Created!");
+          console.log("User created");
+          return;
+        });
       });
     });
   });
@@ -101,10 +98,13 @@ const signIn = (req, res) => {
     if (error) return error;
     if (results.rows.length) {
       const passwordHash = results.rows[0].password;
+      const user = results.rows[0].username;
       bcrypt.compare(password, passwordHash, (err, results) => {
         if (err) return err;
         if (results) {
-          res.status(200).send("Logged in!");
+          const payload = user;
+          const token = jwt.sign({ payload }, process.env.SECRET, { expiresIn: 86400 });
+          res.status(200).json(token);
           console.log("Zalogowano"); // narazie tak
           return;
         }
