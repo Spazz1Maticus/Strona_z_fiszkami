@@ -37,18 +37,20 @@ const removeUser = (req, res) => {
 
 const getCards = (req, res) => {
   pool.query(queries.getCards, (error, results) => {
-    if (error) throw error;
+    if (error) return error;
     res.status(200).json(results.rows);
     return;
   });
 };
 
 const getCard = (req, res) => {
-  const id = Math.floor(Math.random() * 100);
-  pool.query(queries.getCard, [id], (error, results) => {
-    if (error) throw error;
-    res.status(200).json(results.rows);
-    return;
+  pool.query(queries.getCards, (error, results) => {
+    if (error) return error;
+    const id = Math.floor(Math.random() * results.rows.length);
+    pool.query(queries.getCard, [id], (error, results) => {
+      res.status(200).json(results.rows);
+      return;
+    });
   });
 };
 
@@ -104,8 +106,14 @@ const signIn = (req, res) => {
         if (results) {
           const payload = user;
           const token = jwt.sign({ payload }, process.env.SECRET, { expiresIn: 86400 });
-          res.status(200).json(token);
-          console.log("Zalogowano"); // narazie tak
+
+          res.cookie("JWT", token, {
+            maxAge: 86400,
+            httpOnly: true,
+          });
+
+          res.status(200).json({ token });
+          console.log("Zalogowano " + payload);
           return;
         }
         res.status(401).send("Wrong password!");
@@ -117,6 +125,11 @@ const signIn = (req, res) => {
   });
 };
 
+const signOut = (req, res) => {
+  res.status(202).clearCookie("JWT").send("cookie cleared");
+  return;
+};
+
 module.exports = {
   getUsers,
   getUser,
@@ -126,4 +139,5 @@ module.exports = {
   getCard,
   addCard,
   signIn,
+  signOut,
 };

@@ -15,5 +15,6 @@ router.get("/users/:id", controller.getUser);
 router.get("/cards", controller.getCards);
 router.get("/card", controller.getCard);
 router.delete("/users/:id", controller.removeUser);
+router.post("/signout", controller.signOut);
 
 module.exports = router;
