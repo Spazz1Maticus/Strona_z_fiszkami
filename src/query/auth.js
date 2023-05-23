@@ -7,7 +7,6 @@ export const authenticate = (req, res, next) => {
   jwt.verify(token, process.env.SECRET, (err, user) => {
     if (err) {
       res.clearCookie("JWT");
-      res.redirect("api/default/signin");
       return res.sendStatus(403);
     }
     req.user = user;
