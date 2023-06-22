@@ -46,8 +46,7 @@ const getCards = (req, res) => {
 const getCard = (req, res) => {
   pool.query(queries.getCards, (error, results) => {
     if (error) return error;
-    const id = Math.floor(Math.random() * results.rows.length);
-    pool.query(queries.getCard, [id], (error, results) => {
+    pool.query(queries.getCard, (error, results) => {
       res.status(200).json(results.rows);
       return;
     });
@@ -112,7 +111,7 @@ const signIn = (req, res) => {
             httpOnly: true,
           });
 
-          res.status(200).json({ token });
+          res.sendStatus(200);
           console.log("Zalogowano " + payload);
           return;
         }
@@ -126,7 +125,7 @@ const signIn = (req, res) => {
 };
 
 const signOut = (req, res) => {
-  res.status(202).clearCookie("JWT").send("cookie cleared");
+  res.status(200).clearCookie("JWT").send("cookie cleared");
   return;
 };
 

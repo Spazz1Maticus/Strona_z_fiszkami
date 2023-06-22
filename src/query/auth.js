@@ -13,3 +13,24 @@ export const authenticate = (req, res, next) => {
     next();
   });
 };
+
+export const isAdmin = (req, res, next) => {
+  const token = req.cookies.JWT;
+
+  jwt.verify(token, process.env.SECRET, (err, decodedToken) => {
+    if (err) {
+      res.clearCookie("JWT");
+      return res.sendStatus(403);
+    }
+
+    const adminUsername = process.env.ADMIN_USERNAME;
+    const username = decodedToken.payload;
+
+    if (username === adminUsername) {
+      req.user = decodedToken;
+      next();
+    } else {
+      return res.sendStatus(403);
+    }
+  });
+};

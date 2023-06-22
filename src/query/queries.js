@@ -6,7 +6,7 @@ const addUser = "INSERT INTO users (username, email, password) VALUES ($1, $2, $
 const getByUsername = "SELECT * FROM users WHERE username = $1";
 const removeUser = "DELETE FROM users WHERE id = $1";
 const getCards = "SELECT * FROM cards";
-const getCard = "SELECT * FROM cards WHERE id = $1";
+const getCard = "SELECT * FROM cards ORDER BY RANDOM() LIMIT 1";
 const cardExists = "SELECT s FROM cards s WHERE s.word = $1";
 const addCard = "INSERT INTO cards (word, meaning) VALUES ($1, $2)";
 

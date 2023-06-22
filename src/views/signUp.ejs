@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Fiszks</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <%- include('./layouts/header') %>
+    <div class="login-page">
+      <div class="form">
+        <form class="login-form" method="POST" action="/auth/signup">
+          <input type="text" name="username" placeholder="name" />
+          <input type="password" name="password" placeholder="password" />
+          <input type="text" name="email" placeholder="email address" />
+          <button>create</button>
+        </form>
+      </div>
+    </div>
+    <%- include('./layouts/footer') %>
+  </body>
+</html>
